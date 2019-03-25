@@ -1,0 +1,40 @@
+version: '2'
+services:
+  # Container "web"
+  web:
+    # Will download the image from Docker hub
+    image: dockercloud/hello-world
+    # Listening port
+    ports:
+      - 8080
+    networks:
+      - front-tier
+      - back-tier
+
+  redis:
+    image: redis
+    # Link the redis container with the web one
+    links:
+      - web
+    networks:
+      - back-tier
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - web
+    networks:
+      - front-tier
+      - back-tier
+    # ???
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+networks:
+  # Create networks
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
