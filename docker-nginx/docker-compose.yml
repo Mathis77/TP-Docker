@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    image: dockercloud/hello-world
+    ports:
+      - 8000:80
+    environment:
+      - VIRTUAL_HOST=WEB
+  web2:
+    image: dockercloud/hello-world
+    ports:
+      - 8001:80
+    environment:
+      - VIRTUAL_HOST=WEB2
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
